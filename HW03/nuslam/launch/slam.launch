@@ -1,0 +1,112 @@
+<launch>
+    <arg name="robot" default="-1"/>
+    <arg name="debug" default="false"/>
+
+    <!-- if robot==-1, simulate slam in gazebo. load the information of the turtlebot burger and xacro file. -->
+    <group if="$(eval robot==-1)">
+        <include file="$(find gazebo_ros)/launch/empty_world.launch">
+            <arg name="world_name" value="$(find nuturtlebot)/worlds/block.world"/> 
+        </include>
+        <param name="robot_description" command="$(find xacro)/xacro.py $(find nuturtle_description)/urdf/diff_drive.gazebo.xacro" />
+        <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -x 0 -y 0 -z 0.1 -model nuturtle" output="screen"/>
+        <node ns="real" pkg="nuslam" type="analysis" name="analysis" output="screen">
+            <param name="noiseVariance" type="double" value="0.01"/>
+        </node>
+
+    </group>
+
+    <!-- if robot!=0, visualization and keyboard command are valid. -->
+    <group unless="$(eval robot==0)">
+
+        <node name="rviz" pkg="rviz" type="rviz" args="-d $(find nuturtle_description)/config/landmarks.rviz" required="true"/>
+        <node name="turtlebot3_teleop_key" pkg="turtlebot3_teleop" type="turtlebot3_teleop_key"/>
+
+
+        <!-- draw_map -->
+        <group if="$(arg debug)">
+            <node name="draw_map" pkg="nuslam" type="draw_map" output="screen" >
+                <param name="frame_id" type="str" value="map"/>
+                <remap from="landmarks" to="real/landmarks"/>
+                <param name="timeInterval" type="double" value="0.5"/>
+            </node>
+        </group>
+        <group unless="$(arg debug)">
+            <node name="draw_map" pkg="nuslam" type="draw_map" output="screen" >
+                <param name="frame_id" type="str" value="base_scan"/>
+                <param name="timeInterval" type="double" value="0.5"/>
+            </node>
+        </group>
+        <node machine="turtlebot" name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+        <node pkg="tf2_ros" type="static_transform_publisher" name="link1_broadcaster" args="0 0 0 0 0 0 odom map" />
+
+
+        <!-- start slam node -->
+        <group if="$(arg debug)">
+            <node name="slam" pkg="nuslam" type="slam" output="screen" >
+                <param name="debug" type="str" value="$(arg debug)"/>
+                <param name="detectRadius" type="double" value="0.8"/>
+                <remap from="landmarks" to="real/landmarks"/>
+                <param name="parent_frame_id" type="str" value="map"/>
+                <param name="body_frame_id" type="str" value="base_link"/>
+            </node>
+        </group>
+        <group unless="$(arg debug)">
+            <node name="slam" pkg="nuslam" type="slam" output="screen" >
+
+                <!-- part 1. Corvariance matrix is identity. uncomment this part and comment the 2&3 part. -->
+                <param name="data_association_method" type="int" value="1"/>
+                <param name="associatedDis" type="double" value="0.05"/>
+                <param name="newDis" type="double" value="0.15"/>
+                
+                <!-- part 2. Corvariance matrix is identity. uncomment this part and comment the 1&3 part. -->
+                <!-- <param name="data_association_method" type="int" value="2"/>
+                <param name="threshold" type="double" value="0.5"/>
+                <param name="corvarianceI" type="int" value="1"/> -->
+
+                <!-- part 3. Corvariance matrix is calculated.. uncomment this part and comment the 1&2 part. -->
+                <!-- <param name="data_association_method" type="int" value="2"/>
+                <param name="threshold" type="double" value="200"/>
+                <param name="corvarianceI" type="int" value="0"/> -->
+
+                <param name="debug" type="str" value="$(arg debug)"/>
+                <param name="parent_frame_id" type="str" value="map"/>
+                <param name="detectRadius" type="double" value="2"/>
+                <param name="body_frame_id" type="str" value="base_link"/>
+            </node>
+        </group>
+
+    </group>
+
+
+
+    <!-- connect the turtlebotX -->
+    <!-- if robot==-1, gazebo. if robot==0, local machine. if robot>0, turtlebot -->
+    <include file="$(find nuturtle_robot)/launch/basic_remote.launch">
+        <arg name="robot" default="$(arg robot)" />
+    </include>
+
+    <!-- load the diff_params for burger3. -->
+    <rosparam command="load" file="$(find nuturtle_description)/config/diff_params.yaml"/>
+
+    <!-- start the turtle_interface -->
+    <node machine="turtlebot" pkg="nuturtle_robot" type="turtle_interface" name="turtle_interface">
+    </node>
+
+    <!-- start odometer and fake odometer -->
+    <node machine="turtlebot" pkg="rigid2d" type="odometer" name="odometer" output="screen">
+        <param name="odom_frame_id" type="str" value="odom"/>
+        <param name="body_frame_id" type="str" value="fake_base_link"/>
+        <param name="left_wheel_joint" type="str" value="left_wheel_axle"/>
+        <param name="right_wheel_joint" type="str" value="right_wheel_axle"/>
+        <remap from="landmarks" to="real/landmarks"/>
+        <remap from="trajectory" to="odomTrajectory"/>
+    </node>
+
+    <!-- if not debug model, start landmark-->
+    <group unless="$(arg debug)">
+        <node machine="turtlebot" name="landmarks" pkg="nuslam" type="landmarks" output="screen" >
+            <param name="timeInterval" type="double" value="0.01"/>
+        </node>
+    </group>
+    
+</launch>

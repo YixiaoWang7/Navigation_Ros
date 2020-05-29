@@ -1,0 +1,58 @@
+<launch>
+    <!-- load the information of the turtlebot burger and xacro file. -->
+    <rosparam command="load" file="$(find nuturtle_description)/config/diff_params.yaml"/>
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(find nuturtle_description)/urdf/diff_drive.urdf.xacro"/>
+
+    <!-- define the fracion of the velocity -->
+    <param name="frac_vel" value="1" />
+
+    <!-- connect the turtlebotX -->
+    <arg name="robot_connect" default="4"/>
+    <include file="$(find nuturtle_robot)/launch/basic_remote.launch">
+        <arg name="robot" default="$(arg robot_connect)" />
+    </include>
+
+    <!-- start the turtle_interface -->
+    <node machine="turtlebot" pkg="nuturtle_robot" type="turtle_interface" name="turtle_interface">
+    </node>
+
+    <!-- rotation or translation. -->
+    <arg name="RorT" default="0" />
+    <group if="$(eval RorT==0)">
+        <node  machine="turtlebot" pkg="nuturtle_robot" type="rotation" name="rotation" output="screen"/>
+    </group>
+    <group if="$(eval RorT==1)">
+        <node  machine="turtlebot" pkg="nuturtle_robot" type="translation" name="translation" output="screen"/>
+    </group>
+    
+
+    <!-- start fake encoders -->
+    <node  machine="turtlebot" pkg="rigid2d" type="fake_diff_encoders" name="fake_diff_encoders" output="screen">
+        <remap from="joint_states" to="fake/joint_states"/>
+    </node>
+
+    <!-- start odometer and fake odometer -->
+    <node machine="turtlebot" pkg="rigid2d" type="odometer" name="odometer" output="screen">
+        <param name="odom_frame_id" type="str" value="odom"/>
+        <param name="body_frame_id" type="str" value="base_link"/>
+        <param name="left_wheel_joint" type="str" value="left_wheel_axle"/>
+        <param name="right_wheel_joint" type="str" value="right_wheel_axle"/>
+    </node>
+
+    <node machine="turtlebot" ns="fake" pkg="rigid2d" type="odometer" name="odometer" output="screen">
+        <param name="odom_frame_id" type="str" value="fake_odom"/>
+        <param name="body_frame_id" type="str" value="fake_base_link"/>
+        <param name="left_wheel_joint" type="str" value="left_wheel_axle"/>
+        <param name="right_wheel_joint" type="str" value="right_wheel_axle"/>
+    </node>
+    
+    <!-- start rviz, robot_state_publisher and static transform -->
+    <node machine="turtlebot" name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find nuturtle_description)/config/rotation.rviz" required="true"/>
+    <node pkg="tf2_ros" type="static_transform_publisher" name="link1_broadcaster" args="0 0 0 0 0 0 odom fake_odom" />
+
+
+
+
+
+</launch>

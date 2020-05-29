@@ -1,0 +1,34 @@
+Enter the Tab:
+Enter degree, x and y
+Every consecutive two should be separated by single space: 
+Enter the Tbc:
+Enter degree, x and y
+Every consecutive two should be separated by single space: 
+
+Start computing.
+
+Tab:
+dtheta (degrees): 40 dx: 3 dy: 5
+Tba:
+dtheta (degrees): -40 dx: -5.51207 dy: -1.90186
+Tbc:
+dtheta (degrees): 120 dx: 1 dy: 0
+Tcb:
+dtheta (degrees): -120 dx: 0.5 dy: 0.866025
+Tac:
+dtheta (degrees): 160 dx: 3.76604 dy: 5.64279
+Tca:
+dtheta (degrees): -160 dx: 1.60898 dy: 6.59055
+
+Transform twist or vector? (t or v)
+
+Enter the target 2D vector:
+Enter a 2D vector separated by single space:
+
+Enter the frame of the vector: a, b or c
+
+Start computing.
+
+va: [-0.421114 2.91008]
+vb: [-3.9641 0.598076]
+vc: [3 4]

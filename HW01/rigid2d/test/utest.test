@@ -1,0 +1,5 @@
+<launch>
+
+  <test test-name="utest" pkg="rigid2d" type="utest"/>
+
+</launch>

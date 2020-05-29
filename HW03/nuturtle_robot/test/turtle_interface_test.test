@@ -1,0 +1,9 @@
+<launch>
+  <!-- load the paramters, wheel_base, wheel_radius, etc. -->
+  <rosparam command="load" file="$(find nuturtle_description)/config/diff_params.yaml"/>
+  
+  <test test-name="turtle_interface_test" pkg="nuturtle_robot" type="turtle_interface_test"/>
+  
+  <node name="turtle_interface" pkg="nuturtle_robot" type="turtle_interface" output="screen"/>
+
+</launch>

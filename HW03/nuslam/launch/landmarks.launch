@@ -1,0 +1,52 @@
+<launch>
+    <arg name="robot" default="-1"/>
+
+    <!-- if robot==-1, simulate slam in gazebo. load the information of the turtlebot burger and xacro file. -->
+    <group if="$(eval robot==-1)">
+        <include file="$(find gazebo_ros)/launch/empty_world.launch">
+            <arg name="world_name" value="$(find nuturtlebot)/worlds/block.world"/> 
+        </include>
+        <param name="robot_description" command="$(find xacro)/xacro.py $(find nuturtle_description)/urdf/diff_drive.gazebo.xacro" />
+        <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -z 0.1 -model nuturtle" output="screen"/>
+    </group>
+
+    <!-- if robot!=0, visualization and keyboard command are valid. -->
+    <group unless="$(eval robot==0)">
+        <node name="rviz" pkg="rviz" type="rviz" args="-d $(find nuturtle_description)/config/landmarks.rviz" required="true"/>
+        <node name="turtlebot3_teleop_key" pkg="turtlebot3_teleop" type="turtlebot3_teleop_key"/>
+        <node name="draw_map" pkg="nuslam" type="draw_map" output="screen" >
+            <param name="frame_id" type="str" value="base_scan"/>
+        </node>
+        <node machine="turtlebot" name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+    </group>
+
+    <!-- connect the turtlebotX -->
+    <!-- if robot==-1, gazebo. if robot==0, local machine. if robot>0, turtlebot -->
+    <include file="$(find nuturtle_robot)/launch/basic_remote.launch">
+        <arg name="robot" default="$(arg robot)" />
+    </include>
+
+    <!-- load the diff_params for burger3. -->
+    <rosparam command="load" file="$(find nuturtle_description)/config/diff_params.yaml"/>
+
+    <!-- start the turtle_interface -->
+    <node machine="turtlebot" pkg="nuturtle_robot" type="turtle_interface" name="turtle_interface">
+    </node>
+
+
+
+    <!-- start odometer and fake odometer -->
+    <node machine="turtlebot" pkg="rigid2d" type="odometer" name="odometer" output="screen">
+        <param name="odom_frame_id" type="str" value="odom"/>
+        <param name="body_frame_id" type="str" value="base_link"/>
+        <param name="left_wheel_joint" type="str" value="left_wheel_axle"/>
+        <param name="right_wheel_joint" type="str" value="right_wheel_axle"/>
+    </node>
+
+    <!-- start landmarks-->
+    <node machine="turtlebot" name="landmarks" pkg="nuslam" type="landmarks" output="screen" />
+
+
+
+    
+</launch>
