@@ -1,0 +1,10 @@
+<launch>
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(find nuturtle_gazebo)/worlds/simple.world"/> 
+    </include>
+
+    <rosparam command="load" file="$(find nuturtle_description)/config/diff_params.yaml"/>
+
+    <param name="robot_description" command="$(find xacro)/xacro.py $(find nuturtle_description)/urdf/diff_drive.gazebo.xacro" />
+    <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -z 0.1 -model nuturtle" output="screen"/>
+</launch>

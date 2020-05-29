@@ -1,0 +1,22 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "",
+        "limitSymbolsToIncludedHeaders": true
+      },
+      "includePath": [
+        "/home/yixiao/ws/devel/include",
+        "/opt/ros/melodic/include",
+        "/home/yixiao/ws/src/ekf/include",
+        "/home/yixiao/ws/src/geometryfitting/include",
+        "/home/yixiao/ws/src/nuslam/include",
+        "/home/yixiao/ws/src/mygitrepository/nuturtle_gazebo/include",
+        "/home/yixiao/ws/src/nuturtle_robot/include",
+        "/home/yixiao/ws/src/mygitrepository/rigid2d/include",
+        "/usr/include"
+      ],
+      "name": "Linux"
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+<?xml version="0.0.1"?>
+<package format="2">
+  <name>rigid2d</name>
+  <version>0.0.0</version>
+  <description>rigid2d pkg used as ros node</description>
+
+  <maintainer email="yixiaowang2020@u.northwestern.edu">Yixiao Wang</maintainer>
+  <license>BSD</license>
+  <author email="yixiaowang2020@u.northwestern.edu">Yixiao Wang</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_export_depend>roscpp</build_export_depend>
+  <build_export_depend>rospy</build_export_depend>
+  <build_export_depend>std_msgs</build_export_depend>
+  <exec_depend>roscpp</exec_depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <build_depend>tf2</build_depend>
+  <build_export_depend>tf2</build_export_depend>
+  <exec_depend>tf2</exec_depend>
+  <build_depend>tf2_ros</build_depend>
+  <build_export_depend>tf2_ros</build_export_depend>
+  <exec_depend>tf2_ros</exec_depend>
+  <build_depend>nav_msgs</build_depend>
+  <build_export_depend>nav_msgs</build_export_depend>
+  <exec_depend>nav_msgs</exec_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_export_depend>sensor_msgs</build_export_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <build_depend>geometry_msgs</build_depend>
+  <build_export_depend>geometry_msgs</build_export_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <build_depend>rostest</build_depend>
+  <build_export_depend>rostest</build_export_depend>
+  <exec_depend>rostest</exec_depend>
+
+
+  <build_depend>message_generation</build_depend>
+  <exec_depend>message_runtime</exec_depend>
+  
+  <!-- The export tag contains other, unspecified, tags -->
+  <export>
+    <!-- Other tools can request additional information be placed here -->
+    <cpp cflags="-I${prefix}/include" lflags="-L${prefix}/lib -lrigid2d"/>
+  </export>
+  <test_depend>rosunit</test_depend>
+</package>
