@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="nuturtle">
+
+  <xacro:property name="yaml_file" value="$(find nuturtle_description)/config/diff_params.yaml" />
+  <xacro:property name="props" value="${load_yaml(yaml_file)}"/>
+  <xacro:property name="wheel_width" value="${props['wheel_width']}"/>
+  <xacro:property name="wheel_radius" value="${props['wheel_radius']}"/>
+  <xacro:property name="wheel_base" value="${props['wheel_base']}"/>
+  <xacro:property name="chassis_length" value="${props['chassis_length']}"/>
+  <xacro:property name="chassis_thickness" value="${props['chassis_thickness']}"/>
+
+  <xacro:macro name="box_inertia" params="m w h d">
+    <inertial>
+      <mass value="${m}"/>
+      <inertia ixx="${m / 12.0 * (d*d + h*h)}" ixy="0.0" ixz="0.0" iyy="${m / 12.0 * (w*w + h*h)}" iyz="0.0" izz="${m / 12.0 * (w*w + d*d)}"/>
+    </inertial>
+  </xacro:macro>
+ 
+  <link name="base_link">
+  <!-- <xacro:box_inertia m="10" w="${chassis_length}" h="${wheel_base-wheel_width}" d="${chassis_thickness}"/> -->
+    <visual>
+      <origin xyz="${chassis_length/2-wheel_radius} 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="${chassis_length} ${wheel_base-wheel_width} ${chassis_thickness}"/>
+      </geometry>
+      <material name="red">  
+        <color rgba="1 0 0 1"/>  
+      </material> 
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${chassis_length} ${wheel_base-wheel_width} ${chassis_thickness}"/>
+      </geometry>
+    </collision>
+  </link>
+ 
+
+
+
+<xacro:macro name="cylinder_inertia" params="m r h">
+    <inertial>
+      <mass value="${m}"/>
+      <inertia ixx="${m*(3*r*r+h*h)/12}" ixy = "0" ixz = "0" iyy="${m*(3*r*r+h*h)/12}" iyz = "0" izz="${m*r*r/2}"/> 
+    </inertial>
+</xacro:macro>
+ 
+  <xacro:macro name="wheel" params="prefix reflect">
+    <link name="${prefix}_wheel">
+      <visual>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+        <geometry>
+          <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+        </geometry>
+        <material name="blue">  
+          <color rgba="0 0 1 1"/>  
+        </material> 
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+        <geometry>
+          <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+        </geometry>
+      </collision>
+      <xacro:cylinder_inertia m="10" r="${wheel_radius}" h="${wheel_width}"/>
+    </link>
+ 
+    <joint name="${prefix}_wheel_axle" type="continuous">
+      <axis xyz="0 1 0" rpy="0 0 0" />
+      <parent link="base_link"/>
+      <child link="${prefix}_wheel"/>
+      <origin xyz="0 ${wheel_base/2*reflect} 0" rpy="0 0 0"/>
+    </joint> 
+  </xacro:macro>
+ 
+  <xacro:wheel prefix="left" reflect="1"/>
+  <xacro:wheel prefix="right" reflect="-1"/>
+
+
+
+<xacro:macro name="sphere_inertia" params="m r">
+    <inertial>
+      <mass value="${m}"/>
+      <inertia ixx="${2.0*m*(r*r)/5.0}" ixy="0.0" ixz="0.0" iyy="${2.0*m*(r*r)/5.0}" iyz="0.0" izz="${2.0*m*(r*r)/5.0}"/>
+    </inertial>
+  </xacro:macro>
+ 
+   <link name="ball_caster">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="${wheel_radius/2-chassis_thickness/4}"/>
+      </geometry>
+      <material name="yellow">  
+        <color rgba="1 1 0 1"/>  
+      </material> 
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="${wheel_radius/2-chassis_thickness/4}"/>
+      </geometry>
+    </collision>
+    <!-- <xacro:sphere_inertia m="5" r="${wheel_radius/2-chassis_thickness/4}"/> -->
+  </link>
+ 
+  <joint name="ball_caster_joint" type="fixed">
+    <axis xyz="0 1 0" rpy="0 0 0" />
+    <parent link="base_link"/>
+    <child link="ball_caster"/>
+    <origin xyz="${chassis_length-wheel_radius-wheel_radius/2+chassis_thickness/4} 0 ${-wheel_radius/2+chassis_thickness/4-chassis_thickness/2}" rpy="0 0 0"/>
+  </joint>
+
+
+
+
+
+
+</robot>

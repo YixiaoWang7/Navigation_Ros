@@ -1,0 +1,19 @@
+#Parameter Description: Geometry of the robot
+
+#wheel_width: The width of the wheels
+#wheel_radius: The radius of the wheels
+#wheel_base: The distance between the centers wheels
+#chassis_length: The length of the main chassis link
+#chassis_thickness: The thickness of the plate that forms the chassis
+
+
+wheel_width: 0.018
+wheel_radius: 0.033
+wheel_base: 0.16
+chassis_length: 0.138
+chassis_thickness: 0.005
+encoder_ticks_per_rev: 4096
+max_trans_v: 0.22
+max_rot_v_robot: 2.84
+max_rot_v_motor: 6.35492
+max_power_motor: 20
