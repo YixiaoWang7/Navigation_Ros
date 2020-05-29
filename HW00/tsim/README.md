@@ -14,8 +14,8 @@ src:
 CMakeLists.txt  
 package.xml  
 # ScreenShot of the turtle
-![Image discription](https://github.com/ME495-Navigation/main-assignment-YixiaoWangNu/blob/master/ImageStore/TaskB_turtle.png)
+![Image discription](https://github.com/YixiaoWang7/Navigation_Ros/blob/master/HW00/ImageStore/TaskB_turtle.png)
 # ScreenShot of the rqt_plot
-![Image discription](https://github.com/ME495-Navigation/main-assignment-YixiaoWangNu/blob/master/ImageStore/TaskB_rqt_plot.png)
+![Image discription](https://github.com/YixiaoWang7/Navigation_Ros/blob/master/HW00/ImageStore/TaskB_rqt_plot.png)
 # Video of the tsim pkg
 https://youtu.be/mUZr2kNvI6Q
