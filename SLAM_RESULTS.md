@@ -1,7 +1,6 @@
-# ME495 Sensing, Navigation, and Machine Learning
+# Sensing, Navigation, and Machine Learning
 Author: Yixiao Wang
-# Homework3
-## Task L.002 (SLAM in controlled environment)
+## SLAM in controlled environment
 ### screenshot
 Red line: groundtruth path  
 Blue line: slam path  
@@ -21,7 +20,7 @@ Detect radius: 0.8
 
 Note that all the units are SI units and the angle is expressed as radians not degrees.
 
-## Task L.003 (SLAM with unknown data association)
+## SLAM with unknown data association
 ### screenshot
 ![Image discription](https://github.com/YixiaoWang7/Navigation_Ros/blob/master/HW03/nuslam/images/SLAM_unknown_data_association.png)
 ### final pose error with data association method 1
@@ -40,3 +39,9 @@ I have completed three methods of data association.
 - Method 2 modified: Mahalanobis Distance but the covariance matrix is identity matrix. I find the covariance matrix in Method 2 sometimes has abnormal elements, causing the SLAM algorithm crash. It performs better than original Method 2.
 
 Switch between these methods can be done in the nuslam/launch/slam.launch file. Just change some private parameters. And the default method is Method 1.
+
+## Videos
+### Turtlebot follows the waypoints
+YouTube Link: https://youtu.be/ZGs6JOx26p4
+### SLAM with unknown data association
+YouTube Link: https://youtu.be/ZGs6JOx26p4
