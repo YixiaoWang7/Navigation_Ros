@@ -9,7 +9,7 @@ groundTruth: grouth truth transform
 base_link: slam transform  
 fake_base_link: odometry transform  
 Note in the following two pictures, the ground truth transform and slam transform are close to each other. Further one is odometry transform.  
-![Image discription](https://github.com/YixiaoWang7/Navigation_Ros/blob/master/HW03/nuslam/images/SLAM_controlled_environment.png)
+![Image discription](https://https://github.com/YixiaoWang7/Navigation_Ros/blob/master/nuslam/images/SLAM_controlled_environment.png)
 ### final pose error
 Variance of Gaussian noise: 0.01  
 Detect radius: 0.8  
@@ -22,7 +22,7 @@ Note that all the units are SI units and the angle is expressed as radians not d
 
 ## SLAM with unknown data association
 ### screenshot
-![Image discription](https://github.com/YixiaoWang7/Navigation_Ros/blob/master/HW03/nuslam/images/SLAM_unknown_data_association.png)
+![Image discription](https://https://github.com/YixiaoWang7/Navigation_Ros/blob/master/nuslam/images/SLAM_unknown_data_association.png)
 ### final pose error with data association method 1
 
 |METHOD     | EX 	        | EY     	    | E_THETA(DEGREE) |
@@ -44,4 +44,4 @@ Switch between these methods can be done in the nuslam/launch/slam.launch file. 
 ### Turtlebot follows the waypoints
 YouTube Link: https://youtu.be/ZGs6JOx26p4
 ### SLAM with unknown data association
-YouTube Link: https://youtu.be/ZGs6JOx26p4
+YouTube Link: https://youtu.be/oHBkiDS5sN0
