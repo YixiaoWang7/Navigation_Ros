@@ -1,2 +1,0 @@
-int32 left_velocity
-int32 right_velocity

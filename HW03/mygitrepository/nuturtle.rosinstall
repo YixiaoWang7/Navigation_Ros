@@ -1,6 +1,0 @@
-- git:
-    local-name: mygitrepository
-    uri: https://github.com/ME495-Navigation/main-assignment-YixiaoWangNu.git
-- git:
-    local-name: nuturtlebot
-    uri: https://github.com/ME495-Navigation/nuturtlebot.git
